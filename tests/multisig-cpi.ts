@@ -112,7 +112,7 @@ describe('multisig-cpi', () => {
 
 		dataAccount = await program.account.data.fetch(data.publicKey);
 		assert.equal(dataAccount.value, 42);
-		nsactionData = await multisigProgram.account.transaction.fetch(transaction.publicKey);
+		transactionData = await multisigProgram.account.transaction.fetch(transaction.publicKey);
 		assert.equal(transactionData.didExecute, true);
 
 	});

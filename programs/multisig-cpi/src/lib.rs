@@ -6,7 +6,7 @@ declare_id!("9VtuF6VxDRjUMD1XVfLooYbdkuYwyLA8Us7P1uhYYutq");
 pub mod multisig_cpi {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>, authority: Pubkey) -> ProgramResult {
+    pub fn initialize(ctx: Context<Initialize>, authority: Pubkey) -> Result<()> {
 
         let data = &mut ctx.accounts.data;
         data.authority = authority;
@@ -14,7 +14,7 @@ pub mod multisig_cpi {
         Ok(())
     }
 
-    pub fn update_value(ctx: Context<UpdateData>, value: u8) -> ProgramResult {
+    pub fn update_value(ctx: Context<UpdateData>, value: u8) -> Result<()> {
 
         let data = &mut ctx.accounts.data;
         data.value = value;
@@ -28,6 +28,7 @@ pub mod multisig_cpi {
 pub struct Initialize<'info> {
     #[account(init, payer=payer, space=Data::SIZE)]
     data: Account<'info, Data>,
+    #[account(mut)]
     payer: Signer<'info>,
     system_program: Program<'info, System>
 }
@@ -38,7 +39,6 @@ pub struct UpdateData<'info>{
     data: Account<'info, Data>,
     authority: Signer<'info>
 }
-
 
 #[account]
 pub struct Data {
