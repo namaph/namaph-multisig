@@ -1,5 +1,5 @@
 import * as anchor from '@project-serum/anchor';
-import { Program } from '@project-serum/anchor';
+import { BorshInstructionCoder, Program } from '@project-serum/anchor';
 import { MultisigCpi } from '../target/types/multisig_cpi';
 import { SerumMultisig } from '../target/types/serum_multisig';
 import assert from 'assert';
@@ -89,6 +89,13 @@ describe('multisig-cpi', () => {
 
 		let transactionData = await multisigProgram.account.transaction.fetch(transaction.publicKey);
 		assert.equal(transactionData.didExecute, false);
+
+		const instructionCoder = program.coder.instruction as BorshInstructionCoder;
+		const instruction = instructionCoder.decode(transactionData.data as Buffer);
+		assert.equal(instruction.name, 'updateValue');
+		assert.equal(instruction.data.value, 42);
+
+		console.log(instruction);
 
 		// (approve) we skip this since it's a single owner multisig,
 		// and the proposer approves the transaction when we created it.
