@@ -1,6 +1,6 @@
 import * as anchor from '@project-serum/anchor';
 import { BorshInstructionCoder, Program } from '@project-serum/anchor';
-import { MultisigCpi } from '../target/types/multisig_cpi';
+import { NamaphMultisig as Namaph } from '../target/types/namaph_multisig';
 import { SerumMultisig } from '../target/types/serum_multisig';
 import assert from 'assert';
 
@@ -9,7 +9,7 @@ describe('multisig-cpi', () => {
 	// Configure the client to use the local cluster.
 	anchor.setProvider(anchor.Provider.env());
 
-	const program = anchor.workspace.MultisigCpi as Program<MultisigCpi>;
+	const program = anchor.workspace.NamaphMultisig as Program<Namaph>;
 	const multisigProgram = anchor.workspace.SerumMultisig as Program<SerumMultisig>;
 
 	it('Is initialized!', async () => {

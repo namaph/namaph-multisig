@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 
-declare_id!("9VtuF6VxDRjUMD1XVfLooYbdkuYwyLA8Us7P1uhYYutq");
+declare_id!("A13BbQ3UV9CvermetyC5ymZN2gqCLTM8CqpwragH7kCX");
 
 #[program]
-pub mod multisig_cpi {
+pub mod namaph_multisig {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>, authority: Pubkey) -> Result<()> {

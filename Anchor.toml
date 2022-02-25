@@ -1,8 +1,8 @@
 [features]
 seeds = false
 [programs.localnet]
-multisig_cpi = "9VtuF6VxDRjUMD1XVfLooYbdkuYwyLA8Us7P1uhYYutq"
-serum_multisig = "BX8apctw1h5wnc12K39VEgjQT7pMMT1PY9NqaHD3K914"
+namaph_multisig = "A13BbQ3UV9CvermetyC5ymZN2gqCLTM8CqpwragH7kCX"
+serum_multisig = "F13SUGwECtzuUWKUEFj1fS2ZgZSdiKNu7Wd86NHBStEb"
 
 [registry]
 url = "https://anchor.projectserum.com"
