@@ -13,7 +13,7 @@ serum_multisig = "F13SUGwECtzuUWKUEFj1fS2ZgZSdiKNu7Wd86NHBStEb"
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/home/yasushi/.config/solana/test_id.json"
 
 [scripts]

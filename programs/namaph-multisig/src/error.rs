@@ -5,5 +5,7 @@ pub enum NamaphError {
     #[msg("string is too long")]
     StringTooLong,
     #[msg("bump do not match")]
-    BumpMismatch
+    BumpMismatch,
+    #[msg("not enough balance")]
+    NotEnoughBalanceInTreasury
 }

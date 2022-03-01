@@ -51,4 +51,12 @@ pub mod namaph_multisig {
     pub fn approve(ctx: Context<ApproveCpi>) -> Result<()> {
         approve_cpi::handler(ctx)
     }
+
+    pub fn create_treasury(ctx: Context<CreateTreasury>, treasury_name: String, authority:Pubkey) -> Result<()> {
+        create_treasury::handle(ctx, treasury_name, authority)
+    }
+
+    pub fn spend(ctx: Context<Spend>, amount: u64) -> Result<()> {
+        spend::handler(ctx, amount)
+    }
 }

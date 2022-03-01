@@ -1,7 +1,6 @@
 pub mod membership;
 pub mod topology;
-
-
+pub mod treasury;
 
 pub use membership::*;
 pub use topology::*;
