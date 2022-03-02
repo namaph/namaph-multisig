@@ -39,6 +39,15 @@ pub mod namaph_multisig {
         add_membership::handler(ctx, username, user, pid, accs, data)
     }
 
+    pub fn delete_membership_and_create_transaction(
+        ctx: Context<DeleteMembershipAndCreateTransactionCpi>,
+        pid: Pubkey,
+        accs: Vec<TransactionAccountCpi>,
+        data: Vec<u8>
+        ) -> Result<()> {
+        delete_membership::handler(ctx, pid, accs, data)
+    }
+
     pub fn create_transaction(
         ctx: Context<CreateTransactionCpi>,
         pid: Pubkey,

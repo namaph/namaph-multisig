@@ -134,11 +134,141 @@ describe('multisig-cpi', () => {
 		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
 		let newOwners = multisigData.owners;
 
-		const user = Keypair.generate();
-		const userTx = await program.provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
+		let user = Keypair.generate();
+		let userTx = await program.provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
 		await program.provider.connection.confirmTransaction(userTx);
 
-		const [newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), user.publicKey.toBytes()],
+		let [newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), user.publicKey.toBytes()],
+			program.programId);
+
+		pid = multisigProgram.programId;
+		transaction = Keypair.generate();
+
+		newOwners.push(newMembership);
+
+		data = multisigProgram.coder.instruction.encode("set_owners", {
+			owners: newOwners
+		});
+
+		accounts = multisigProgram.instruction.setOwners.accounts({
+			multisig: multisig.publicKey,
+			multisigSigner: signer
+		}) as ITransactionAccount[];
+
+		await program.rpc.addMembershipAndCreateTransaction(`${username}_1`, user.publicKey, pid, accounts, data, {
+			accounts: {
+				proposer: membership,
+				wallet: program.provider.wallet.publicKey,
+				multisig: multisig.publicKey,
+				transaction: transaction.publicKey,
+				multisigProgram: multisigProgram.programId,
+				membership: newMembership,
+				systemProgram
+			},
+			signers: [transaction],
+			instructions: [
+				await multisigProgram.account.transaction.createInstruction(
+					transaction,
+					transactionSize
+				)
+			]
+		});
+
+		// execute -------------------------------------------------------
+
+		remainingAccounts = accounts
+			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
+			.concat({
+				pubkey: multisigProgram.programId,
+				isSigner: false,
+				isWritable: false
+			});
+
+
+		await multisigProgram.rpc.executeTransaction({
+			accounts: {
+				multisig: multisig.publicKey,
+				multisigSigner: signer,
+				transaction: transaction.publicKey
+			},
+			remainingAccounts
+		});
+
+		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
+		assert.equal(multisigData.owners.length, 2);
+
+		// create 'set owners' (remove) -------------------------------------------------------
+
+		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
+		newOwners = multisigData.owners;
+
+		let pastOwners = newOwners.filter(m => m.toBase58() !== newMembership.toBase58());
+
+		pid = multisigProgram.programId;
+		transaction = Keypair.generate();
+
+		data = multisigProgram.coder.instruction.encode("set_owners", {
+			owners: pastOwners
+		});
+
+		accounts = multisigProgram.instruction.setOwners.accounts({
+			multisig: multisig.publicKey,
+			multisigSigner: signer
+		}) as ITransactionAccount[];
+
+		await program.rpc.deleteMembershipAndCreateTransaction(pid, accounts, data, {
+			accounts: {
+				proposer: membership,
+				wallet: program.provider.wallet.publicKey,
+				multisig: multisig.publicKey,
+				transaction: transaction.publicKey,
+				multisigProgram: multisigProgram.programId,
+				membership: newMembership,
+				user: user.publicKey,
+				systemProgram
+			},
+			signers: [transaction],
+			instructions: [
+				await multisigProgram.account.transaction.createInstruction(
+					transaction,
+					transactionSize
+				)
+			]
+		});
+
+		// execute -------------------------------------------------------
+
+		remainingAccounts = accounts
+			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
+			.concat({
+				pubkey: multisigProgram.programId,
+				isSigner: false,
+				isWritable: false
+			});
+
+
+		await multisigProgram.rpc.executeTransaction({
+			accounts: {
+				multisig: multisig.publicKey,
+				multisigSigner: signer,
+				transaction: transaction.publicKey
+			},
+			remainingAccounts
+		});
+
+		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
+		assert.equal(multisigData.owners.length, 1);
+
+		// create 'set owners' (again) -------------------------------------------------------
+
+		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
+		newOwners = multisigData.owners;
+
+		user = Keypair.generate();
+		userTx = await program.provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
+		await program.provider.connection.confirmTransaction(userTx);
+
+		[newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), user.publicKey.toBytes()],
 			program.programId);
 
 		pid = multisigProgram.programId;
@@ -233,7 +363,7 @@ describe('multisig-cpi', () => {
 
 		data = program.coder.instruction.encode("spend", {
 			amount: new anchor.BN(5 * LAMPORTS_PER_SOL)
-		});	
+		});
 
 		accounts = program.instruction.spend.accounts({
 			treasury,
@@ -244,7 +374,7 @@ describe('multisig-cpi', () => {
 		pid = program.programId;
 
 		await program.rpc.createTransaction(pid, accounts, data, {
-			accounts:{
+			accounts: {
 				membership,
 				multisig: multisig.publicKey,
 				transaction: transaction.publicKey,
@@ -261,15 +391,15 @@ describe('multisig-cpi', () => {
 		});
 
 		remainingAccounts = accounts
-		.map(a => a.pubkey.equals(signer) ? {...a, isSigner: false}: a)
-		.concat({
-			pubkey: program.programId,
-			isSigner: false,
-			isWritable: false
-		});
+			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
+			.concat({
+				pubkey: program.programId,
+				isSigner: false,
+				isWritable: false
+			});
 
 		await multisigProgram.rpc.executeTransaction({
-			accounts:{
+			accounts: {
 				multisig: multisig.publicKey,
 				multisigSigner: signer,
 				transaction: transaction.publicKey
