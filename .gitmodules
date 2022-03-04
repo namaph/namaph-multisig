@@ -1,6 +1,7 @@
 [submodule "app"]
 	path = app
 	url = git@github.com:namaph/namaph-app.git
-[submodule "namaph-util-script"]
-	path = namaph-util-script
+
+[submodule "util"]
+	path = util
 	url = git@github.com:namaph/namaph-util-script.git
