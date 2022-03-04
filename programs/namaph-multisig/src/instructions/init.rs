@@ -61,6 +61,7 @@ pub fn handler(ctx: Context<Init>, username:String, map_name: String, capacity:u
     let topology = &mut ctx.accounts.topology;
     topology.authority = multisig_signer; 
     topology.capacity = capacity;
+    topology.multisig = multisig.key();
     topology.map_name = map_name;
     topology.bump = *ctx.bumps.get("topology").ok_or(NamaphError::BumpMismatch)?;
     topology.values = (0..capacity).map(|_|0).collect();

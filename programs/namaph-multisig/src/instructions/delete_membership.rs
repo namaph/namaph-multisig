@@ -10,6 +10,7 @@ use serum_multisig::cpi::{accounts::CreateTransaction, create_transaction};
 // As a result, there will be situations that the dao will be deadlocked by setting the quora too
 // high.
 // This transaction itself needs to be created.
+// Another thought, why is this paing back the rent to the user of the wallet?
 
 #[derive(Accounts)]
 #[instruction(pid: Pubkey, accs: Vec<TransactionAccountCpi>, data: Vec<u8>)]

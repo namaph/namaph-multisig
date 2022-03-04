@@ -66,7 +66,6 @@ describe('multisig-cpi', () => {
 		assert.equal(topologyData.authority.toBase58(), signer.toBase58());
 
 		// create 'update topology' -------------------------------------------------------
-
 		let transaction = Keypair.generate();
 
 		let updateTopologyIxData = { id: 0, value: 1 };
@@ -197,7 +196,7 @@ describe('multisig-cpi', () => {
 		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
 		assert.equal(multisigData.owners.length, 2);
 
-		// create 'set owners' (remove) -------------------------------------------------------
+		// create 'set owners' (remove) -------------------------------------------------
 
 		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
 		newOwners = multisigData.owners;
@@ -236,8 +235,7 @@ describe('multisig-cpi', () => {
 			]
 		});
 
-		// execute -------------------------------------------------------
-
+		// execute ----------------------------------------------------------------------
 		remainingAccounts = accounts
 			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
 			.concat({
@@ -259,7 +257,7 @@ describe('multisig-cpi', () => {
 		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
 		assert.equal(multisigData.owners.length, 1);
 
-		// create 'set owners' (again) -------------------------------------------------------
+		// create 'set owners' (again) --------------------------------------------------
 
 		multisigData = await multisigProgram.account.multisig.fetch(multisig.publicKey);
 		newOwners = multisigData.owners;
@@ -389,6 +387,8 @@ describe('multisig-cpi', () => {
 				)
 			]
 		});
+		
+		// execute --------------------------------------------------------------
 
 		remainingAccounts = accounts
 			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)

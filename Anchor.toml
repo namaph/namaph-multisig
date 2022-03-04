@@ -18,3 +18,4 @@ wallet = "/home/yasushi/.config/solana/test_id.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+copy = "cp ./target/idl/*.json ../namaph-app/src/idl/ && cp ./target/idl/*.json ../namaph-util-script/src/idl/"

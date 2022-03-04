@@ -8,7 +8,12 @@ use serum_multisig::{
 };
 
 #[derive(Accounts)]
-#[instruction(username: String, user: Pubkey, pid: Pubkey, accs: Vec<TransactionAccountCpi>, data: Vec<u8>)]
+#[instruction(
+    username: String, 
+    user: Pubkey, 
+    pid: Pubkey, 
+    accs: Vec<TransactionAccountCpi>,
+    data: Vec<u8>)]
 pub struct AddMembershipAndCreateTransactionCpi<'info> {
     #[account(
         seeds = [b"membership", proposer.wallet.as_ref()],
@@ -25,7 +30,7 @@ pub struct AddMembershipAndCreateTransactionCpi<'info> {
     multisig_program: Program<'info, SerumMultisig>,
     #[account(
         init,
-        payer=wallet,
+        payer = wallet,
         space= Membership::SIZE,
         seeds = [b"membership", user.as_ref()],
         bump,
