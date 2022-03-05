@@ -35,7 +35,7 @@ pub mod namaph_multisig {
         pid: Pubkey,
         accs: Vec<TransactionAccountCpi>,
         data: Vec<u8>,
-        ) -> Result<()> {
+    ) -> Result<()> {
         add_membership::handler(ctx, username, user, pid, accs, data)
     }
 
@@ -43,8 +43,8 @@ pub mod namaph_multisig {
         ctx: Context<DeleteMembershipAndCreateTransactionCpi>,
         pid: Pubkey,
         accs: Vec<TransactionAccountCpi>,
-        data: Vec<u8>
-        ) -> Result<()> {
+        data: Vec<u8>,
+    ) -> Result<()> {
         delete_membership::handler(ctx, pid, accs, data)
     }
 
@@ -61,11 +61,52 @@ pub mod namaph_multisig {
         approve_cpi::handler(ctx)
     }
 
-    pub fn create_treasury(ctx: Context<CreateTreasury>, treasury_name: String, authority:Pubkey) -> Result<()> {
+    pub fn create_treasury(
+        ctx: Context<CreateTreasury>,
+        treasury_name: String,
+        authority: Pubkey,
+    ) -> Result<()> {
         create_treasury::handle(ctx, treasury_name, authority)
     }
 
     pub fn spend(ctx: Context<Spend>, amount: u64) -> Result<()> {
         spend::handler(ctx, amount)
     }
+
+    pub fn create_url_topic(
+        ctx: Context<CreateUrlTopic>,
+        title: String,
+        authority: Pubkey,
+        pid: Pubkey,
+        accs: Vec<TransactionAccountCpi>,
+        data: Vec<u8>
+    ) -> Result<()> {
+        create_url_topic::handle(ctx, title, authority, pid, accs, data)
+    }
+
+    pub fn update_url_topic(
+        ctx: Context<UpdateUrlTopic>,
+        url: String,
+        ) -> Result<()> {
+        update_url_topic::handle(ctx, url)
+    }
+
+    pub fn create_text_topic(
+        ctx: Context<CreateTextTopic>,
+        title: String,
+        authority: Pubkey,
+        pid: Pubkey,
+        accs: Vec<TransactionAccountCpi>,
+        data: Vec<u8>
+    ) -> Result<()> {
+        create_text_topic::handle(ctx, title, authority, pid, accs, data)
+    }
+
+    pub fn update_text_topic(
+        ctx: Context<UpdateTextTopic>,
+        body: String,
+        ) -> Result<()> {
+        update_text_topic::handle(ctx, body)
+    }
+
 }

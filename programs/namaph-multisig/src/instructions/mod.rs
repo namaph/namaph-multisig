@@ -6,6 +6,10 @@ pub mod add_membership;
 pub mod delete_membership; 
 pub mod create_treasury;
 pub mod spend;
+pub mod create_url_topic;
+pub mod update_url_topic;
+pub mod create_text_topic;
+pub mod update_text_topic;
 
 pub use init::*;
 pub use update_topology::*;
@@ -15,3 +19,7 @@ pub use add_membership::*;
 pub use delete_membership::*;
 pub use create_treasury::*;
 pub use spend::*;
+pub use create_url_topic::*;
+pub use update_url_topic::*;
+pub use create_text_topic::*;
+pub use update_text_topic::*;
