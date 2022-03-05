@@ -2,7 +2,6 @@ use crate::error::NamaphError;
 use crate::model::treasury::Treasury;
 use crate::util::fit_string;
 use anchor_lang::prelude::*;
-use serum_multisig::program::SerumMultisig;
 use serum_multisig::Multisig;
 
 #[derive(Accounts)]
@@ -30,8 +29,6 @@ pub fn handle(ctx: Context<CreateTreasury>, treasury_name: String, authority: Pu
 
     let multisig = &ctx.accounts.multisig;
 
-    let m_key = multisig.key();
-    let seeds = &[m_key.as_ref()];
     let treasury = &mut ctx.accounts.treasury;
     treasury.name = treasury_name;
     treasury.authority = authority;

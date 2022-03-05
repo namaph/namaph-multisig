@@ -1,20 +1,21 @@
 use crate::model::Membership;
-use crate::{error::NamaphError, model::TransactionAccountCpi};
+use crate::model::TransactionAccountCpi;
 use anchor_lang::prelude::*;
 use serum_multisig::{
     cpi::{
-        accounts::{CreateMultisig, CreateTransaction},
+        accounts::CreateTransaction,
         create_transaction,
     },
     program::SerumMultisig,
     TransactionAccount,
 };
 
+
 #[derive(Accounts)]
 pub struct CreateTransactionCpi<'info> {
     // the membership is the 'prposer'
     #[account(
-        seeds = [b"membership", membership.multisig.as_ref(), membership.wallet.as_ref()],
+        seeds = [b"membership", multisig.key().as_ref(), wallet.key().as_ref()],
         bump = membership.bump,
         has_one = wallet,
         )]
