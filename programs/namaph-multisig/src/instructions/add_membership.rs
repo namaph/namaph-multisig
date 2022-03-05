@@ -16,7 +16,7 @@ use serum_multisig::{
     data: Vec<u8>)]
 pub struct AddMembershipAndCreateTransactionCpi<'info> {
     #[account(
-        seeds = [b"membership", proposer.wallet.as_ref()],
+        seeds = [b"membership", proposer.multisig.as_ref(), proposer.wallet.as_ref()],
         bump = proposer.bump,
         has_one = wallet
         )]
@@ -32,7 +32,7 @@ pub struct AddMembershipAndCreateTransactionCpi<'info> {
         init,
         payer = wallet,
         space= Membership::SIZE,
-        seeds = [b"membership", user.as_ref()],
+        seeds = [b"membership", multisig.to_account_info().key().as_ref(), user.as_ref()],
         bump,
         )]
     membership: Account<'info, Membership>,
@@ -72,8 +72,11 @@ pub fn handler(
         proposer: ctx.accounts.proposer.to_account_info(),
     };
 
+    let multisig_key = &ctx.accounts.multisig.key();
+
     let seeds = &[
         &b"membership"[..],
+        multisig_key.as_ref(),
         proposer.wallet.as_ref(),
         &[proposer.bump],
     ];

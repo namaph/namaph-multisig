@@ -11,7 +11,7 @@ pub struct ApproveCpi<'info> {
     transaction: UncheckedAccount<'info>,
         #[account(
         has_one = wallet,
-        seeds = [b"membership", membership.wallet.as_ref()],
+        seeds = [b"membership", multisig.key().as_ref(), wallet.key().as_ref()],
         bump = membership.bump,
         )]
     membership: Account<'info, Membership>,
@@ -31,8 +31,11 @@ pub fn handler(ctx: Context<ApproveCpi>) -> Result<()> {
         owner: ctx.accounts.membership.to_account_info(),
     };
 
+    let multisig_key = &ctx.accounts.multisig.key();
+
     let seeds = &[
         &b"membership"[..],
+        multisig_key.as_ref(), 
         membership.wallet.as_ref(),
         &[membership.bump],
     ];

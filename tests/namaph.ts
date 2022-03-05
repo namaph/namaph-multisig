@@ -35,9 +35,13 @@ describe('multisig-cpi', () => {
 
 		const [topology] = await PublicKey.findProgramAddress([Buffer.from('topology'), Buffer.from(mapName.slice(0, 32))], program.programId);
 
-		const [membership] = await PublicKey.findProgramAddress([Buffer.from('membership'), program.provider.wallet.publicKey.toBytes()],
+		const [membership] = await PublicKey.findProgramAddress(
+			[Buffer.from('membership'), 
+				multisig.publicKey.toBytes(), 
+				program.provider.wallet.publicKey.toBytes()],
 			program.programId);
 
+		console.log('init');
 		await program.rpc.initialize(username, mapName, 10, nonce, {
 			accounts: {
 				topology,
@@ -80,6 +84,10 @@ describe('multisig-cpi', () => {
 
 		const transactionSize = 1000;
 
+		console.log('create "update topology" ');
+		console.log('membership', multisig.publicKey.toBase58());
+		console.log('transaction', transaction.publicKey.toBase58());
+		console.log('wallet', program.provider.wallet.publicKey.toBase58());
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
@@ -138,7 +146,7 @@ describe('multisig-cpi', () => {
 		let userTx = await program.provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
 		await program.provider.connection.confirmTransaction(userTx);
 
-		let [newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), user.publicKey.toBytes()],
+		let [newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), multisig.publicKey.toBytes(), user.publicKey.toBytes()],
 			program.programId);
 
 		pid = multisigProgram.programId;
@@ -267,7 +275,7 @@ describe('multisig-cpi', () => {
 		userTx = await program.provider.connection.requestAirdrop(user.publicKey, 10 * anchor.web3.LAMPORTS_PER_SOL);
 		await program.provider.connection.confirmTransaction(userTx);
 
-		[newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), user.publicKey.toBytes()],
+		[newMembership] = await PublicKey.findProgramAddress([Buffer.from('membership'), multisig.publicKey.toBytes(), user.publicKey.toBytes()],
 			program.programId);
 
 		pid = multisigProgram.programId;

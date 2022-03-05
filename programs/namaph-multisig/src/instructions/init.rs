@@ -21,7 +21,7 @@ pub struct Init<'info> {
         init, 
         space = Membership::SIZE,
         payer = payer, 
-        seeds = [b"membership", payer.key().as_ref()],
+        seeds = [b"membership", multisig.key().as_ref(), payer.key().as_ref()],
         bump
         )]
     membership: Account<'info, Membership>,
@@ -44,6 +44,8 @@ pub fn handler(ctx: Context<Init>, username:String, map_name: String, capacity:u
     let program = ctx.accounts.multisig_program.to_account_info();
     let multisig = ctx.accounts.multisig.to_account_info();
     let multisig_pubkey = multisig.key();
+
+    membership.multisig = multisig_pubkey;
             
     let seeds = &[multisig_pubkey.as_ref()];
     let (multisig_signer, _) = Pubkey::find_program_address(seeds, &program.key());

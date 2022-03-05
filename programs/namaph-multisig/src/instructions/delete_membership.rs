@@ -16,7 +16,7 @@ use serum_multisig::cpi::{accounts::CreateTransaction, create_transaction};
 #[instruction(pid: Pubkey, accs: Vec<TransactionAccountCpi>, data: Vec<u8>)]
 pub struct DeleteMembershipAndCreateTransactionCpi<'info> {
     #[account(
-        seeds = [b"membership", proposer.wallet.as_ref()],
+        seeds = [b"membership", multisig.key().as_ref(), proposer.wallet.as_ref()],
         bump = proposer.bump,
         has_one = wallet
         )]
@@ -31,7 +31,7 @@ pub struct DeleteMembershipAndCreateTransactionCpi<'info> {
     #[account(
         mut,
         close = user,
-        seeds = [b"membership", membership.wallet.as_ref()],
+        seeds = [b"membership", multisig.key().as_ref(), membership.wallet.as_ref()],
         bump = membership.bump,
         )]
     membership: Account<'info, Membership>,
@@ -60,8 +60,11 @@ pub fn handler(
         proposer: ctx.accounts.proposer.to_account_info(),
     };
 
+    let multisig_key = &ctx.accounts.multisig.key();
+
     let seeds = &[
         &b"membership"[..],
+        multisig_key.as_ref(),
         proposer.wallet.as_ref(),
         &[proposer.bump],
     ];

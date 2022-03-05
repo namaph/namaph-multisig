@@ -14,7 +14,7 @@ use serum_multisig::{
 pub struct CreateTransactionCpi<'info> {
     // the membership is the 'prposer'
     #[account(
-        seeds = [b"membership", membership.wallet.as_ref()],
+        seeds = [b"membership", membership.multisig.as_ref(), membership.wallet.as_ref()],
         bump = membership.bump,
         has_one = wallet,
         )]
@@ -47,8 +47,11 @@ pub fn handler(
         proposer: membership.to_account_info(),
     };
 
+    let multisig_key = &ctx.accounts.multisig.key();
+
     let seeds = &[
         &b"membership"[..],
+        multisig_key.as_ref(),
         membership.wallet.as_ref(),
         &[membership.bump],
     ];
