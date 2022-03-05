@@ -83,6 +83,7 @@ describe('multisig-cpi', () => {
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
+				wallet: program.provider.wallet.publicKey,
 				multisig: multisig.publicKey,
 				transaction: transaction.publicKey,
 				multisigProgram: multisigProgram.programId,
@@ -374,6 +375,7 @@ describe('multisig-cpi', () => {
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
+				wallet: program.provider.wallet.publicKey,
 				multisig: multisig.publicKey,
 				transaction: transaction.publicKey,
 				multisigProgram: multisigProgram.programId,
@@ -426,6 +428,7 @@ describe('multisig-cpi', () => {
 			accounts: {
 				membership,
 				multisig: multisig.publicKey,
+				wallet: program.provider.wallet.publicKey,
 				transaction: transaction.publicKey,
 				multisigProgram: multisigProgram.programId,
 				systemProgram
@@ -476,6 +479,7 @@ describe('multisig-cpi', () => {
 			accounts: {
 				membership,
 				multisig: multisig.publicKey,
+				wallet: program.provider.wallet.publicKey,
 				transaction: transaction.publicKey,
 				multisigProgram: multisigProgram.programId,
 				systemProgram

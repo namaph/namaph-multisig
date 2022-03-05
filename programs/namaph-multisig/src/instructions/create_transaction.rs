@@ -16,8 +16,10 @@ pub struct CreateTransactionCpi<'info> {
     #[account(
         seeds = [b"membership", membership.wallet.as_ref()],
         bump = membership.bump,
+        has_one = wallet,
         )]
     membership: Account<'info, Membership>,
+    wallet: Signer<'info>,
     /// CHECK: this goes straight to the cpi
     multisig: UncheckedAccount<'info>,
     /// CHECK: this goes straight to the cpi
