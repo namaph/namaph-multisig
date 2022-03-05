@@ -41,7 +41,6 @@ describe('multisig-cpi', () => {
 				program.provider.wallet.publicKey.toBytes()],
 			program.programId);
 
-		console.log('init');
 		await program.rpc.initialize(username, mapName, 10, nonce, {
 			accounts: {
 				topology,
@@ -84,10 +83,6 @@ describe('multisig-cpi', () => {
 
 		const transactionSize = 1000;
 
-		console.log('create "update topology" ');
-		console.log('membership', multisig.publicKey.toBase58());
-		console.log('transaction', transaction.publicKey.toBase58());
-		console.log('wallet', program.provider.wallet.publicKey.toBase58());
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
@@ -136,6 +131,133 @@ describe('multisig-cpi', () => {
 
 		topologyData = await program.account.topology.fetch(topology);
 		assert.equal(topologyData.values[0], 1);
+
+		// create 'text topic' -------------------------------------------------------
+
+		pid = program.programId;
+		const textTopicTitle = "text topic title";
+		const [textTopic] = await PublicKey.findProgramAddress([
+			Buffer.from("text"),
+			multisig.publicKey.toBytes(),
+			Buffer.from(textTopicTitle.slice(0,32))
+		], pid); 
+
+		transaction = Keypair.generate();
+
+		data = program.coder.instruction.encode("update_text_topic", {
+			body: "this is the body of a test topic.."
+		})
+
+		accounts = program.instruction.updateTextTopic.accounts({
+			textTopic,	
+			authority: signer,
+		}) as ITransactionAccount[];
+
+
+		await program.rpc.createTextTopic(
+			textTopicTitle,
+			signer,
+			pid, 
+			accounts, 
+			data,
+			{
+				accounts:{
+					topic: textTopic,
+					multisig: multisig.publicKey,
+					systemProgram,
+					proposer: membership,
+					wallet: program.provider.wallet.publicKey,
+					transaction: transaction.publicKey,
+					multisigProgram: multisigProgram.programId,
+				},
+				signers:[transaction],
+				instructions: [
+					await multisigProgram.account.transaction.createInstruction(transaction, transactionSize)
+				]
+		});
+
+		// execute -------------------------------------------------------
+
+		remainingAccounts = accounts
+			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
+			.concat({
+				pubkey: program.programId,
+				isSigner: false,
+				isWritable: false
+			});
+
+
+		await multisigProgram.rpc.executeTransaction({
+			accounts: {
+				multisig: multisig.publicKey,
+				multisigSigner: signer,
+				transaction: transaction.publicKey
+			},
+			remainingAccounts
+		});
+
+		// create 'url topic' -------------------------------------------------------
+
+		const urlTopicTitle = "url topic title";
+		const [urlTopic] = await PublicKey.findProgramAddress([
+			Buffer.from("url"),
+			multisig.publicKey.toBytes(),
+			Buffer.from(urlTopicTitle.slice(0,32))
+		], pid); 
+
+		transaction = Keypair.generate();
+
+		data = program.coder.instruction.encode("update_url_topic", {
+			url: "https://namaph.dev"
+		})
+
+		accounts = program.instruction.updateUrlTopic.accounts({
+			urlTopic,	
+			authority: signer,
+		}) as ITransactionAccount[];
+
+
+		await program.rpc.createUrlTopic(
+			urlTopicTitle,
+			signer,
+			pid, 
+			accounts, 
+			data,
+			{
+				accounts:{
+					urlTopic,
+					multisig: multisig.publicKey,
+					systemProgram,
+					proposer: membership,
+					wallet: program.provider.wallet.publicKey,
+					transaction: transaction.publicKey,
+					multisigProgram: multisigProgram.programId,
+				},
+				signers:[transaction],
+				instructions: [
+					await multisigProgram.account.transaction.createInstruction(transaction, 2000)
+				]
+		});
+
+		// execute -------------------------------------------------------
+
+		remainingAccounts = accounts
+			.map(a => a.pubkey.equals(signer) ? { ...a, isSigner: false } : a)
+			.concat({
+				pubkey: program.programId,
+				isSigner: false,
+				isWritable: false
+			});
+
+
+		await multisigProgram.rpc.executeTransaction({
+			accounts: {
+				multisig: multisig.publicKey,
+				multisigSigner: signer,
+				transaction: transaction.publicKey
+			},
+			remainingAccounts
+		});
 
 		// create 'set owners' -------------------------------------------------------
 
