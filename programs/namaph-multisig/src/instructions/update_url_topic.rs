@@ -4,7 +4,7 @@ use crate::util::fit_string;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(url:String)]
+#[instruction(title: String, url:String)]
 pub struct UpdateUrlTopic<'info> {
     #[account(
         mut,
@@ -16,7 +16,7 @@ pub struct UpdateUrlTopic<'info> {
     authority: Signer<'info>,
 }
 
-pub fn handle(ctx: Context<UpdateUrlTopic>, url: String) -> Result<()> {
+pub fn handle(ctx: Context<UpdateUrlTopic>, _title: String, url: String) -> Result<()> {
     require!(
         url.len() < UrlTopic::MAX_URL_BYTES,
         NamaphError::StringTooLong

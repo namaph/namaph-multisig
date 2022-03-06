@@ -145,6 +145,7 @@ describe('multisig-cpi', () => {
 		transaction = Keypair.generate();
 
 		data = program.coder.instruction.encode("update_text_topic", {
+			title: textTopicTitle,
 			body: "this is the body of a test topic.."
 		})
 
@@ -208,6 +209,7 @@ describe('multisig-cpi', () => {
 		transaction = Keypair.generate();
 
 		data = program.coder.instruction.encode("update_url_topic", {
+			title: urlTopicTitle,
 			url: "https://namaph.dev"
 		})
 

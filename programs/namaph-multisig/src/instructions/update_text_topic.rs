@@ -4,7 +4,7 @@ use crate::util::fit_string;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(body:String)]
+#[instruction(title: String, body:String)]
 pub struct UpdateTextTopic<'info> {
     #[account(
         mut,
@@ -16,7 +16,7 @@ pub struct UpdateTextTopic<'info> {
     authority: Signer<'info>,
 }
 
-pub fn handle(ctx: Context<UpdateTextTopic>, body: String) -> Result<()> {
+pub fn handle(ctx: Context<UpdateTextTopic>, _title: String, body: String) -> Result<()> {
     require!(
         body.len() < TextTopic::MAX_BODY_BYTES,
         NamaphError::StringTooLong

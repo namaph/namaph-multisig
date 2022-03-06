@@ -86,9 +86,10 @@ pub mod namaph_multisig {
 
     pub fn update_url_topic(
         ctx: Context<UpdateUrlTopic>,
+        title: String,
         url: String,
         ) -> Result<()> {
-        update_url_topic::handle(ctx, url)
+        update_url_topic::handle(ctx, title, url)
     }
 
     pub fn create_text_topic(
@@ -104,9 +105,10 @@ pub mod namaph_multisig {
 
     pub fn update_text_topic(
         ctx: Context<UpdateTextTopic>,
+        title: String, 
         body: String,
         ) -> Result<()> {
-        update_text_topic::handle(ctx, body)
+        update_text_topic::handle(ctx, title, body)
     }
 
 }
