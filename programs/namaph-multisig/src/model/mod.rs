@@ -1,6 +1,7 @@
 pub mod membership;
 pub mod topology;
 pub mod treasury;
+pub mod transaction_meta;
 pub mod url;
 pub mod text;
 
@@ -8,6 +9,7 @@ pub use membership::*;
 pub use topology::*;
 pub use url::*;
 pub use text::*;
+pub use transaction_meta::*;
 use anchor_lang::prelude::*;
 
 use serum_multisig::TransactionAccount;

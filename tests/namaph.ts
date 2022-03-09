@@ -83,12 +83,18 @@ describe('multisig-cpi', () => {
 
 		const transactionSize = 1000;
 
+		let [transactionMeta] = await PublicKey.findProgramAddress([
+			Buffer.from('transaction_meta').slice(0,32),
+			transaction.publicKey.toBytes()
+		], program.programId);
+
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
 				wallet: program.provider.wallet.publicKey,
 				multisig: multisig.publicKey,
 				transaction: transaction.publicKey,
+				transactionMeta,
 				multisigProgram: multisigProgram.programId,
 				systemProgram
 			},
@@ -504,12 +510,18 @@ describe('multisig-cpi', () => {
 
 		pid = program.programId;
 
+		[transactionMeta] = await PublicKey.findProgramAddress([
+			Buffer.from('transaction_meta').slice(0,32),
+			transaction.publicKey.toBytes()
+		], program.programId);
+
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
 				wallet: program.provider.wallet.publicKey,
 				multisig: multisig.publicKey,
 				transaction: transaction.publicKey,
+				transactionMeta,
 				multisigProgram: multisigProgram.programId,
 				systemProgram
 			},
@@ -556,12 +568,18 @@ describe('multisig-cpi', () => {
 
 		pid = multisigProgram.programId;
 
+		[transactionMeta] = await PublicKey.findProgramAddress([
+			Buffer.from('transaction_meta').slice(0,32),
+			transaction.publicKey.toBytes()
+		], program.programId);
+
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
 				multisig: multisig.publicKey,
 				wallet: program.provider.wallet.publicKey,
 				transaction: transaction.publicKey,
+				transactionMeta,
 				multisigProgram: multisigProgram.programId,
 				systemProgram
 			},
@@ -607,12 +625,18 @@ describe('multisig-cpi', () => {
 
 		pid = program.programId;
 
+		[transactionMeta] = await PublicKey.findProgramAddress([
+			Buffer.from('transaction_meta').slice(0,32),
+			transaction.publicKey.toBytes()
+		], program.programId);
+
 		await program.rpc.createTransaction(pid, accounts, data, {
 			accounts: {
 				membership,
 				multisig: multisig.publicKey,
 				wallet: program.provider.wallet.publicKey,
 				transaction: transaction.publicKey,
+				transactionMeta,
 				multisigProgram: multisigProgram.programId,
 				systemProgram
 			},
