@@ -1,10 +1,12 @@
 use anchor_lang::prelude::*;
 use crate::model::Topology;
+use crate::model::Membership;
 
 #[derive(Accounts)]
 pub struct UpdateTopology<'info>{
     #[account(mut,has_one=authority)]
     topology: Account<'info, Topology>,
+    proposer: Account<'info, Membership>,
     authority: Signer<'info>
 }
 

@@ -3,6 +3,7 @@ use anchor_lang::prelude::*;
 #[account]
 pub struct UrlTopic {
    pub multisig: Pubkey,
+   pub proposer: Pubkey,
    pub title: String,
    pub url: String,
    pub authority: Pubkey,
@@ -15,6 +16,7 @@ impl UrlTopic {
     pub const SIZE:usize = 
         8 + // disc
         32 + // multisig
+        32 + // proposer
         4 + Self::MAX_TITLE_BYTES + // in ascii
         4 + Self::MAX_URL_BYTES + // in ascii
         32 + // authority 

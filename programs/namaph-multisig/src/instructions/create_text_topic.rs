@@ -54,6 +54,7 @@ pub fn handle(
     let multisig = &ctx.accounts.multisig;
 
     let topic = &mut ctx.accounts.topic;
+    topic.proposer = ctx.accounts.proposer.key();
     topic.title = title;
     topic.authority = authority;
     topic.bump = *ctx.bumps.get("topic").ok_or(NamaphError::BumpMismatch)?;

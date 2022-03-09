@@ -57,6 +57,7 @@ pub fn handle(
     let url_topic = &mut ctx.accounts.url_topic;
     url_topic.title = title;
     url_topic.authority = authority;
+    url_topic.proposer = ctx.accounts.proposer.key();
     url_topic.bump = *ctx.bumps.get("url_topic").ok_or(NamaphError::BumpMismatch)?;
     url_topic.multisig = multisig.key();
 
