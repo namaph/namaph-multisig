@@ -29,7 +29,7 @@ pub struct AddMembershipAndCreateTransactionCpi<'info> {
     transaction: UncheckedAccount<'info>,
     multisig_program: Program<'info, SerumMultisig>,
     #[account(
-        init,
+        init_if_needed,
         payer = wallet,
         space= Membership::SIZE,
         seeds = [b"membership", multisig.key().as_ref(), user.as_ref()],

@@ -9,6 +9,10 @@ serum_multisig = "F13SUGwECtzuUWKUEFj1fS2ZgZSdiKNu7Wd86NHBStEb"
 namaph_multisig = "A13BbQ3UV9CvermetyC5ymZN2gqCLTM8CqpwragH7kCX"
 serum_multisig = "F13SUGwECtzuUWKUEFj1fS2ZgZSdiKNu7Wd86NHBStEb"
 
+[programs.mainnet]
+serum_multisig = "32GVEhxwPxBBNDpdvLzZiBEfE2221vKbJ7L8v7Zk39BF"
+namaph_multisig = "58iucLiYSA1iNDG6Qo9jTWmRtk25Un3XLBDTyGhEeqHR"
+
 [registry]
 url = "https://anchor.projectserum.com"
 

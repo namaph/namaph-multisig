@@ -7,7 +7,7 @@ use crate::model::TransactionAccountCpi;
 use anchor_lang::prelude::*;
 use instructions::*;
 
-declare_id!("A13BbQ3UV9CvermetyC5ymZN2gqCLTM8CqpwragH7kCX");
+declare_id!("58iucLiYSA1iNDG6Qo9jTWmRtk25Un3XLBDTyGhEeqHR");
 
 #[program]
 pub mod namaph_multisig {
